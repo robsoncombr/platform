@@ -25,7 +25,8 @@ import core, {
   type MixinUpdate,
   type Projection,
   type Ref,
-  type WorkspaceId
+  systemAccountUuid,
+  type WorkspaceUuid
 } from '@hcengineering/core'
 import { PlatformError, unknownStatus } from '@hcengineering/platform'
 import { type DomainHelperOperations } from '@hcengineering/server-core'
@@ -272,7 +273,7 @@ export function getDBClient (connectionString: string, database?: string): Postg
 export function convertDoc<T extends Doc> (
   domain: string,
   doc: T,
-  workspaceId: string,
+  workspaceId: WorkspaceUuid,
   schemaAndFields?: SchemaAndFields
 ): DBDoc {
   const extractedFields: Doc & Record<string, any> = {
@@ -400,13 +401,13 @@ export function escapeBackticks (str: string): string {
 }
 
 export function isOwner (account: Account): boolean {
-  return account.role === AccountRole.Owner || account._id === core.account.System
+  return account.role === AccountRole.Owner || account.uuid === systemAccountUuid
 }
 
 export class DBCollectionHelper implements DomainHelperOperations {
   constructor (
     protected readonly client: postgres.Sql,
-    protected readonly workspaceId: WorkspaceId
+    protected readonly workspaceId: WorkspaceUuid
   ) {}
 
   async dropIndex (domain: Domain, name: string): Promise<void> {}
@@ -435,7 +436,7 @@ export class DBCollectionHelper implements DomainHelperOperations {
 
   async estimatedCount (domain: Domain): Promise<number> {
     const res = await this
-      .client`SELECT COUNT(_id) FROM ${this.client(translateDomain(domain))} WHERE "workspaceId" = ${this.workspaceId.name}`
+      .client`SELECT COUNT(_id) FROM ${this.client(translateDomain(domain))} WHERE "workspaceId" = ${this.workspaceId}`
 
     return res.count
   }
@@ -499,7 +500,7 @@ export function parseDoc<T extends Doc> (doc: DBDoc, schema: Schema): T {
 }
 
 export interface DBDoc extends Doc {
-  workspaceId: string
+  workspaceId: WorkspaceUuid
   data: Record<string, any>
   [key: string]: any
 }

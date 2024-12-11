@@ -99,7 +99,8 @@ export function serveWorkspaceAccount (
     region,
     parseInt(process.env.PARALLEL ?? '1'),
     wsOperation,
-    brandings
+    brandings,
+    accountUri
   )
 
   void worker.start(
