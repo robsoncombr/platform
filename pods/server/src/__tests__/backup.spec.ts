@@ -21,7 +21,12 @@ describe.skip('test-backup-find', () => {
   it('check create/load/clean', async () => {
     const toolCtx = new MeasureMetricsContext('-', {})
     // We should setup a DB with docuemnts and try to backup them.
-    const wsUrl = { name: 'testdb-backup-test', workspaceName: 'test', workspaceUrl: 'test' }
+    const wsUrl = {
+      name: 'testdb-backup-test',
+      uuid: 'testdb-backup-uuid',
+      workspaceName: 'test',
+      workspaceUrl: 'test'
+    }
     const { pipeline, storageAdapter } = await getServerPipeline(toolCtx, model, dbURL, wsUrl, {
       storageConfig: STORAGE_CONFIG,
       disableTriggers: true
@@ -64,7 +69,12 @@ describe.skip('test-backup-find', () => {
   it('check traverse', async () => {
     const toolCtx = new MeasureMetricsContext('-', {})
     // We should setup a DB with docuemnts and try to backup them.
-    const wsUrl = { name: 'testdb-backup-test', workspaceName: 'test', workspaceUrl: 'test' }
+    const wsUrl = {
+      name: 'testdb-backup-test',
+      uuid: 'testdb-backup-uuid',
+      workspaceName: 'test',
+      workspaceUrl: 'test'
+    }
     const { pipeline, storageAdapter } = await getServerPipeline(toolCtx, model, dbURL, wsUrl, {
       storageConfig: STORAGE_CONFIG,
       disableTriggers: true
